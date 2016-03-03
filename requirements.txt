@@ -1,3 +1,4 @@
+click==6.3
 extras==0.0.3
 fixtures==1.4.0
 funcsigs==0.4
