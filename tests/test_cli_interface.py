@@ -1,7 +1,7 @@
-'''
+"""
 CLI Interface tests
 ===================
-'''
+"""
 
 from unittest import TestCase
 
