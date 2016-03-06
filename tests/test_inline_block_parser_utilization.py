@@ -26,6 +26,6 @@ class TestInlineBlockParserUsage(TestCase):
         block = Block()
         self.assertIsInstance(self.inline_parser.parse(block), list)
 
-    def test_initialization_without_params(self):
-        block = Block()
-        self.
+    # def test_initialization_without_params(self):
+    #     block = Block()
+    #     self.
