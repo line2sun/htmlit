@@ -4,7 +4,7 @@ from htmlit.html_tags import BaseHTMLTag
 
 class Block:
 
-    def __init__(self, _input=None):                           # ToDo: Make sure that the initialization is well tested.
+    def __init__(self, _input=None):
         if isinstance(_input, self.__class__):
             self.data = _input.data
             self.html_tag = _input.html_tag
@@ -27,7 +27,8 @@ class Block:
         self.html_tag = _tag
 
     def __str__(self):
-        return self.data
+
+        return str((self.data, self.inline_blocks, self.html_tag.get_html_repr(self.data)))
 
     def has_inline(self):
         if self.inline_blocks:
