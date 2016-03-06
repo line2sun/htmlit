@@ -24,7 +24,35 @@ class HighLevelBlockParser(BaseBlockParser):
         return _input
 
     def run(self):
-        return []
+        result = []
+        inp_str = self._input.split('\n')
+        current_block = ''
+
+        for line in inp_str:
+            if line.startswith('#'):
+                current_block += line
+                result.append(Block(current_block))
+                current_block = ''
+                continue
+
+            elif line.startswith('```'):
+                current_block += line + '\n'
+
+            elif line.startswith('```') and current_block:
+                current_block += line
+                result.append(Block(current_block))
+                current_block = ''
+                continue
+
+            elif line == '' and current_block:
+                result.append(Block(current_block))
+                current_block = ''
+                continue
+
+            else:
+                current_block += line + '\n'
+
+        return result
 
 
 class InlineBlockParser(BaseBlockParser):
@@ -35,4 +63,15 @@ class InlineBlockParser(BaseBlockParser):
         return _input
 
     def run(self):
-        return ['I guesss']
+
+        return []
+
+if __name__ == '__main__':
+    inp_path = '/Users/line2sun/test1/in.md'
+
+    with open(inp_path, 'r') as _file:
+        inp = _file.read()
+
+    hbp = HighLevelBlockParser(_input=inp)
+    for item in hbp.run():
+        print item
