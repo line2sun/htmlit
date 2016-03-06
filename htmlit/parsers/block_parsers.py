@@ -1,4 +1,5 @@
 from htmlit.blocks import Block
+from htmlit.html_tags import *
 
 
 class BaseBlockParser(object):
@@ -31,24 +32,34 @@ class HighLevelBlockParser(BaseBlockParser):
         for line in inp_str:
             if line.startswith('#'):
                 current_block += line
-                result.append(Block(current_block))
+                level = current_block.rfind('#')+1
+                current_block = current_block[level:]
+                block = Block(current_block)
+                block.set_html_tag(Header(level=level))
+                result.append(block)
                 current_block = ''
                 continue
 
-            elif line.startswith('```'):
-                current_block += line + '\n'
+            elif line.startswith('```')and not current_block:
+                current_block += line
 
             elif line.startswith('```') and current_block:
                 current_block += line
-                result.append(Block(current_block))
+                current_block = current_block[3:-3]
+                block = Block(current_block)
+                block.set_html_tag(Code())
+                result.append(block)
                 current_block = ''
                 continue
 
             elif line == '' and current_block:
-                result.append(Block(current_block))
+                block = Block(current_block)
+                block.set_html_tag(Paragraph())
+                result.append(block)
                 current_block = ''
                 continue
-
+            elif line == '' and not current_block:
+                continue
             else:
                 current_block += line + '\n'
 
@@ -75,3 +86,4 @@ if __name__ == '__main__':
     hbp = HighLevelBlockParser(_input=inp)
     for item in hbp.run():
         print item
+
