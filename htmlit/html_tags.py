@@ -33,9 +33,9 @@ class Header(BaseHTMLTag):
         self.set_level(level)
 
     def set_level(self, level):
-        if len(level)<1 or len(level)>6:
+        if level<1 or level>6:
             raise ValueError
-        self._level = len(level)
+        self._level = level
 
     def level(self):
         return self._level
