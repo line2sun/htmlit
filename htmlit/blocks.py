@@ -15,6 +15,8 @@ class Block:
             self.html_tag = None
         elif _input is None:
             self.data = None
+            self.inline_blocks = []
+            self.html_tag = None
         else:
             raise ValueError
 
