@@ -53,18 +53,18 @@ class Paragraph(BaseHTMLTag):
         self.HTML_CLOSE_REPR = '</p>'
 
 
-class Strong(BaseHTMLTag):
-    def __init__(self):
-        super(Strong, self).__init__()
-        self.HTML_OPEN_REPR = '<strong>'
-        self.HTML_CLOSE_REPR = '</strong>'
-
-
 class Code(BaseHTMLTag):
     def __init__(self):
         super(Code, self).__init__()
         self.HTML_OPEN_REPR = '<code>'
         self.HTML_CLOSE_REPR = '</code>'
+
+
+class Strong(BaseHTMLTag):
+    def __init__(self):
+        super(Strong, self).__init__()
+        self.HTML_OPEN_REPR = '<strong>'
+        self.HTML_CLOSE_REPR = '</strong>'
 
 
 class Em(BaseHTMLTag):
@@ -74,7 +74,30 @@ class Em(BaseHTMLTag):
         self.HTML_CLOSE_REPR = '</em>'
 
 
+class URL(BaseHTMLTag):
+    def __init__(self):
+        super(URL, self).__init__()
+        self.HTML_OPEN_REPR = ''
+        self.HTML_CLOSE_REPR = ''
+
+
+class Anchor(BaseHTMLTag):
+    def __init__(self):
+        super(Anchor, self).__init__()
+        self.HTML_OPEN_REPR = '<a%s>'
+        self.HTML_CLOSE_REPR = '</a>'
+
+    def get_html_repr(self, text=None):
+        data, url = text.split('::')
+        result = self.HTML_OPEN_REPR % (' href=' + url)
+        result += data + self.HTML_CLOSE_REPR
+        return result
+
+
 INLINE_HTML_TAG_NAME_MAP = {
     'em': Em,
-    'strong': Strong
+    'strong': Strong,
+    'backtick': Code,
+    'url': URL,
+    'link': Anchor,
 }
