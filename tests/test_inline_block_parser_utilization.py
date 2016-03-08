@@ -4,14 +4,10 @@ Inline Block Parser objects utilization tests.
 
 from unittest import TestCase
 
-<<<<<<< Updated upstream
-from htmlit.parsers.block_parsers import InlineBlockParser
-from htmlit.blocks import Block
-=======
+
 from htmlit.blocks import Block
 from htmlit.html_tags import Paragraph
 from htmlit.parsers.block_parsers import InlineBlockParser
->>>>>>> Stashed changes
 
 
 class TestInlineBlockParserUsage(TestCase):
@@ -28,16 +24,10 @@ class TestInlineBlockParserUsage(TestCase):
             self.inline_parser.parse(_input)
         self.assertTrue(ve)
 
-<<<<<<< Updated upstream
-    def test_returns_a_list(self):
-        block = Block()
-        self.assertIsInstance(self.inline_parser.parse(block), list)
-=======
     def test_returns_a_block_instance(self):
         block = Block('test')
         block.set_html_tag(Paragraph())
         self.assertIsInstance(self.inline_parser.parse(block), Block)
->>>>>>> Stashed changes
 
     # def test_initialization_without_params(self):
     #     block = Block()
