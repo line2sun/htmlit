@@ -95,7 +95,8 @@ class InlineBlockParser(BaseBlockParser):
         inp_block = self._input
 
         for pattern in INLINE_PATTERN_POOL:
-            print inp_block
+
+            # print inp_block                               # To see each stage of parsing uncomment this.
             _new_inline_blocks, _new_data = self._inline_parse(pattern, inp_block)
             if _new_inline_blocks:
                 inp_block.data = _new_data
@@ -106,59 +107,55 @@ class InlineBlockParser(BaseBlockParser):
     @staticmethod
     def _inline_parse(pattern, _block):
         result = []
-        pattern_re = pattern[0]
-        pattern_name = pattern[1]
-        pattern_match_group_id = pattern[2]
-        pattern_sub_group_id = pattern[3]
 
-        matches = pattern_re.findall(_block.data)
+        matches = pattern.findall(_block.data)
 
         _new_block_data = _block.data
-        print 'MATCHES: ', matches
+        # print 'MATCHES: ', matches
 
         for match in matches:
+            # print 'FILTER: ', filter(lambda e: len(e) > 0, map(lambda l: match[l], pattern.data_group_ids))
+            if filter(lambda e: len(e) > 0, map(lambda l: match[l], pattern.data_group_ids)):
 
-            if match[pattern_sub_group_id]:
-
-                _sub_match_pattern = match[pattern_match_group_id] + match[pattern_sub_group_id] + match[1]
-                print 'SUB_MATCH_PATTERN: ', _sub_match_pattern
+                _sub_match_pattern = match[pattern.match_group_id]
+                # print 'SUB_MATCH_PATTERN: ', _sub_match_pattern
 
                 _new_block_data = _block.data.replace(_sub_match_pattern, '%s')
                 _block.data = _new_block_data
-                _new_block = Block(match[pattern_sub_group_id])
-                _new_block.set_html_tag(INLINE_HTML_TAG_NAME_MAP[pattern_name]())
+                _new_data = '::'.join(map(str, map(lambda e: match[e], pattern.data_group_ids)))
+                # print '_NEW_DATA: ', _new_data
+                _new_block = Block(_new_data)
+                _new_block.set_html_tag(INLINE_HTML_TAG_NAME_MAP[pattern.name]())
 
-                occ = len(re.findall('%s', match[pattern_sub_group_id]))
-                print 'OCC: ', occ
+                occ = len(re.findall('%s', _new_data))
+                # print 'OCC: ', occ
                 if occ > 0:
                     _new_block.inline_blocks = _block.inline_blocks[:occ]
                     _block.inline_blocks = _block.inline_blocks[occ:]
                 result.append(_new_block)
         result += _block.inline_blocks
-        print '---------------> NEW_DATA: ', _new_block_data
+        # print '---------------> NEW_DATA: ', _new_block_data
         return result, _new_block_data
 
 if __name__ == '__main__':
-    # inp_path = '/Users/line2sun/test1/in.md'
+    inp_path = '/Users/line2sun/test1/in.md'
 
-    # with open(inp_path, 'r') as _file:
-    #     inp = _file.read()
+    with open(inp_path, 'r') as _file:
+        inp = _file.read()
 
-    # hbp = HighLevelBlockParser(_input=inp)
-    # ibp = InlineBlockParser()
-    # high_level_blocks = hbp.run()
-
-    # for item in high_level_blocks:
-    #     item = ibp.parse(_input=item)
-
-
-
-    # for inliner in high_level_blocks:
-    #     print inliner.to_str()
-    data = 'fancy **strong _em_ and *another em*** plus **strong** text.'
-    _input = Block(data)
-    _input.set_html_tag(Paragraph())
-
+    hbp = HighLevelBlockParser(_input=inp)
     ibp = InlineBlockParser()
+    high_level_blocks = hbp.run()
 
-    print ibp.parse(_input=_input).to_str()
+    for item in high_level_blocks:
+        item = ibp.parse(_input=item)
+
+    for inliner in high_level_blocks:
+        print inliner.to_str()
+
+
+    # data = 'fancy **strong _em_ and *another em with `code` emphasis*** plus **str_on_g** text.'
+    # _input = Block(data)
+    # _input.set_html_tag(Paragraph())
+    # ibp = InlineBlockParser()
+    # print ibp.parse(_input=_input).to_str()
