@@ -72,3 +72,9 @@ class Em(BaseHTMLTag):
         super(Em, self).__init__()
         self.HTML_OPEN_REPR = '<em>'
         self.HTML_CLOSE_REPR = '</em>'
+
+
+INLINE_HTML_TAG_NAME_MAP = {
+    'em': Em,
+    'strong': Strong
+}

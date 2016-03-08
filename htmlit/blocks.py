@@ -75,11 +75,16 @@ if __name__ == '__main__':
     b2 = Block('b2 %s --> %s')
     b2.set_html_tag(Paragraph())
 
-    b3 = Block('b3')
+    b3 = Block('b3 *** %s ')
     b3.set_html_tag(Paragraph())
 
     b4 = Block('b4')
     b4.set_html_tag(Paragraph())
+
+    b5 = Block('b5')
+    b5.set_html_tag(Paragraph())
+
+    b3.inline_blocks = [b5]
 
     b2.inline_blocks = [b3, b4]
 
@@ -90,5 +95,6 @@ if __name__ == '__main__':
     print b2.has_inline()
     print b3.has_inline()
     print b4.has_inline()
+    print b5.has_inline()
 
     print b.to_str()
