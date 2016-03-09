@@ -19,10 +19,8 @@ or
     ./markdown http://example.com/markdown/input.md
 
 """
-
 import click
-import logging
-import htmlit as markdown
+import htmlit
 
 
 def process_input_argument(input_argument):
@@ -39,14 +37,14 @@ def process_input_argument(input_argument):
     return file_path, url
 
 
-def parse_options(input=None, output_path='~/markdown/outputs', verbose=0):
+def parse_options(_input=None, output_path='~/markdown/outputs/', verbose=0):
     """ Parses CLI options using click.
     :param input:
     :param output_path:
     :param verbose:
     :return:
     """
-    input_file_path, input_url = process_input_argument(input)
+    input_file_path, input_url = process_input_argument(_input)
 
     options = {
         'input_file_path': input_file_path,
@@ -67,7 +65,7 @@ def run(input, output_path, verbose):
     markdown_options = parse_options(input, output_path, verbose)
 
     # Pass the options to Controller Layer
-    markdown.Markdown(**markdown_options).convert()
+    htmlit.Markdown(**markdown_options).convert()
 
 if __name__ == '__main__':
     run()
